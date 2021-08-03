@@ -1,1 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLHttpRequest</title>
+</head>
+<body>
+  <script>
+    var req = new XMLHttpRequest();
+req.open('GET','https://restcountries.eu/rest/v2/all',true);
+req.send();
+req.onload = function(){
+    var data = JSON.parse(this.response);
+    console.log(data);
 
+    //Get all the countries from Asia continent /region using Filter function
+    var asiaContinent = data.filter((x)=>{
+      return x.region =='Asia'
+    });
+
+    console.log(asiaContinent);
+    for(var i in asiaContinent){
+        console.log(asiaContinent[i].name +":"+ asiaContinent[i].region);
+    }
+    //Get all the countries with a population of less than 2 lakhs using Filter function
+
+    var popLessThan2Lakhs = data.filter((x)=>{
+        return x.population < 200000;
+    });
+
+    console.log(popLessThan2Lakhs);
+    for(var i in popLessThan2Lakhs){
+        console.log(popLessThan2Lakhs[i].name +':'+ popLessThan2Lakhs[i].population);
+    }
+
+    //Print the following details name, capital, flag using forEach function
+
+    data.forEach((x) => {
+        let nameOfCountry = x.name;
+        let capital = x.capital;
+        let flag = x.flag;
+
+        console.log(nameOfCountry+','+capital+','+flag);
+
+    });
+
+    //Print the total population of countries using reduce function
+
+     var pop =[];
+     for(var i in data){
+         pop.push(data[i].population);
+     }
+    
+     let totalPopulation = pop.reduce((acc,cur)=>{
+        return acc+cur;
+    });
+    console.log(totalPopulation);
+
+    //Print the country which uses US Dollars as currency.
+    var currency = data.filter((x)=>{
+        return x.currencies[0].name =='United States dollar';
+
+    });
+    for(var i in currency){
+    console.log(currency[i].name +' => '+currency[i].currencies[0].name);
+    }
+}
+
+  </script>
+</body>
+</html>
